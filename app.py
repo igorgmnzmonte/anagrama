@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from model import anagrama
+from models.model import anagrama
 
 app = Flask(__name__)
 

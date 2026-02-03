@@ -1,19 +1,96 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>Anagram</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Anagrama - Descobra o Poder das Palavras</title>
 </head>
 <body>
-    <h1>bem vindo</h1>
-    {% if resposta %}
-        <h1>A palavra "{{ palavra }}" tem {{ resposta }} anagrama(s)!</h1>
-    {% endif %}
-    <form action="{{ url_for('home') }}" method="post">
-        <input type="text" name="palavra" id="palavra" placeholder="palavra aqui(exemplo: 'banana')">
-        <button type="submit">Resposta</button>
-    </form>
+    <div class="stars"></div>
+    
+    <div class="container">
+        <div class="header-section">
+            <h1 class="title">
+                <span class="letter" style="--delay: 0s">A</span>
+                <span class="letter" style="--delay: 0.1s">N</span>
+                <span class="letter" style="--delay: 0.2s">A</span>
+                <span class="letter" style="--delay: 0.3s">G</span>
+                <span class="letter" style="--delay: 0.4s">R</span>
+                <span class="letter" style="--delay: 0.5s">A</span>
+                <span class="letter" style="--delay: 0.6s">M</span>
+            </h1>
+            <p class="subtitle">Descubra quantos anagramas sua palavra pode formar</p>
+        </div>
+
+        <div class="card-container">
+            <div class="input-wrapper">
+                <form action="{{ url_for('home') }}" method="post" class="form">
+                    <div class="input-group">
+                        <input 
+                            type="text" 
+                            name="palavra" 
+                            id="palavra" 
+                            class="input-field"
+                            placeholder="Digite uma palavra..."
+                            required
+                        >
+                        <span class="input-border"></span>
+                        <label class="input-label">Palavra</label>
+                    </div>
+                    <button type="submit" class="submit-btn">
+                        <span class="btn-text">Calcular</span>
+                        <span class="btn-icon">→</span>
+                    </button>
+                </form>
+            </div>
+
+            {% if resposta %}
+            <div class="result-container">
+                <div class="result-card fade-in">
+                    <div class="result-word">{{ palavra }}</div>
+                    <div class="result-text">
+                        <span class="result-label">Quantidade de Anagramas</span>
+                        <span class="result-number" data-value="{{ resposta }}">0</span>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="floating-elements">
+            <div class="float-item" style="--index: 1"></div>
+            <div class="float-item" style="--index: 2"></div>
+            <div class="float-item" style="--index: 3"></div>
+        </div>
+    </div>
+
+    <script>
+        const resultNumber = document.querySelector('.result-number');
+        if (resultNumber) {
+            const finalValue = parseInt(resultNumber.getAttribute('data-value'));
+            let currentValue = 0;
+            const increment = Math.ceil(finalValue / 50);
+            
+            const counter = setInterval(() => {
+                currentValue += increment;
+                if (currentValue >= finalValue) {
+                    currentValue = finalValue;
+                    clearInterval(counter);
+                }
+                resultNumber.textContent = currentValue.toLocaleString('pt-BR');
+            }, 20);
+        }
+
+        const inputField = document.getElementById('palavra');
+        inputField.addEventListener('focus', function() {
+            this.parentElement.classList.add('focused');
+        });
+        inputField.addEventListener('blur', function() {
+            if (!this.value) {
+                this.parentElement.classList.remove('focused');
+            }
+        });
+    </script>
 </body>
 </html>
